@@ -22,21 +22,18 @@
     .header-fixed { 
       position: fixed; top: 0; width: 100%;
       background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
-      z-index: 100; padding: 5px 0 0 0; /* Padding superior reduzido */
+      z-index: 100; padding: 5px 0 0 0; 
     }
     .container { max-width: 500px; margin: auto; padding: 0 15px; }
     
-    /* LOGO REDUZIDA */
     .logo-container { text-align: center; margin-bottom: 0px; }
     .logo-container img { max-height: 40px; width: auto; }
 
-    /* TÍTULO MENOR E COM MENOS MARGEM */
     h1 { 
       color: #075E54; font-size: 16px; text-align: center; 
       margin: 2px 0 5px 0; font-weight: bold; 
     }
 
-    /* BARRA DE INFO MAIS COMPACTA */
     .header-info { background: #f9f9f9; padding: 6px; border-radius: 6px; border: 1px solid #eee; font-size: 13px; margin-bottom: 5px; }
     
     select, textarea { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 15px; box-sizing: border-box; }
@@ -54,7 +51,6 @@
     }
 
     .tabs-container { display: flex; background: white; border-top: 1px solid #eee; }
-    /* ABAS MAIS FINAS */
     .tab-btn { 
       flex: 1; padding: 6px 2px; border: none; background: transparent; 
       font-size: 12px; font-weight: bold; color: #888; cursor: pointer; 
@@ -69,7 +65,6 @@
     .modo-entrada .box-estoque, .modo-entrada .box-quebra, .modo-entrada .box-saida { display: none !important; }
     .modo-saida .box-estoque, .modo-saida .box-quebra, .modo-saida .box-entrada { display: none !important; }
 
-    /* LISTA SUBIU: O 'top' foi de 310px para 200px! */
     .scrollable-content { 
       position: absolute;
       top: 200px; 
@@ -359,12 +354,16 @@
   function confirmarEEnviar() {
     const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagemFinal)}`;
     
-    window.open(url, '_blank');
+    // 1. Fecha o popup primeiro
     fecharRevisao();
     
-    setTimeout(() => {
-      window.location.reload(); 
-    }, 1500); 
+    // 2. Limpa a tela imediatamente, deixando ela pronta no fundo
+    limparFormulario();
+    window.scrollTo(0, 0);
+    
+    // 3. Redireciona na MESMA aba. O celular abrirá o WhatsApp sozinho.
+    // Quando você fechar o WhatsApp e voltar pro Safari, a tela vai estar lá, limpinha!
+    window.location.href = url;
   }
 
   carregarDados();
