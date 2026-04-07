@@ -22,26 +22,29 @@
     .header-fixed { 
       position: fixed; top: 0; width: 100%;
       background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
-      z-index: 100; padding: 10px 0 0 0; 
+      z-index: 100; padding: 5px 0 0 0; /* Padding superior reduzido */
     }
     .container { max-width: 500px; margin: auto; padding: 0 15px; }
     
-    .logo-container { text-align: center; margin-bottom: 5px; }
-    .logo-container img { max-height: 80px; width: auto; }
+    /* LOGO REDUZIDA */
+    .logo-container { text-align: center; margin-bottom: 0px; }
+    .logo-container img { max-height: 40px; width: auto; }
 
+    /* TÍTULO MENOR E COM MENOS MARGEM */
     h1 { 
-      color: #075E54; font-size: 18px; text-align: center; 
-      margin: 5px 0 10px 0; font-weight: bold; 
+      color: #075E54; font-size: 16px; text-align: center; 
+      margin: 2px 0 5px 0; font-weight: bold; 
     }
 
-    .header-info { background: #f9f9f9; padding: 8px; border-radius: 8px; border: 1px solid #eee; font-size: 13px; margin-bottom: 10px; }
+    /* BARRA DE INFO MAIS COMPACTA */
+    .header-info { background: #f9f9f9; padding: 6px; border-radius: 6px; border: 1px solid #eee; font-size: 13px; margin-bottom: 5px; }
     
-    select, textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 16px; box-sizing: border-box; }
+    select, textarea { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 15px; box-sizing: border-box; }
     
-    .search-container { position: relative; margin-top: 8px; }
+    .search-container { position: relative; margin-top: 5px; }
     .search-input { 
-      width: 100%; padding: 10px 35px 10px 10px; border-radius: 6px; 
-      border: 1px solid #25D366; font-size: 16px; box-sizing: border-box;
+      width: 100%; padding: 8px 35px 8px 10px; border-radius: 6px; 
+      border: 1px solid #25D366; font-size: 15px; box-sizing: border-box;
     }
     .btn-clear-search {
       position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
@@ -51,23 +54,25 @@
     }
 
     .tabs-container { display: flex; background: white; border-top: 1px solid #eee; }
+    /* ABAS MAIS FINAS */
     .tab-btn { 
-      flex: 1; padding: 10px 2px; border: none; background: transparent; 
-      font-size: 13px; font-weight: bold; color: #888; cursor: pointer; 
+      flex: 1; padding: 6px 2px; border: none; background: transparent; 
+      font-size: 12px; font-weight: bold; color: #888; cursor: pointer; 
       border-bottom: 3px solid transparent; transition: all 0.3s;
       display: flex; flex-direction: column; align-items: center; gap: 2px;
     }
     .tab-btn.active { color: #075E54; border-bottom: 3px solid #25D366; background: #f0fdf4; }
-    .tab-icon { font-size: 16px; } 
+    .tab-icon { font-size: 15px; } 
 
     .modo-estoque .box-quebra, .modo-estoque .box-entrada, .modo-estoque .box-saida { display: none !important; }
     .modo-quebra .box-estoque, .modo-quebra .box-entrada, .modo-quebra .box-saida { display: none !important; }
     .modo-entrada .box-estoque, .modo-entrada .box-quebra, .modo-entrada .box-saida { display: none !important; }
     .modo-saida .box-estoque, .modo-saida .box-quebra, .modo-saida .box-entrada { display: none !important; }
 
+    /* LISTA SUBIU: O 'top' foi de 310px para 200px! */
     .scrollable-content { 
       position: absolute;
-      top: 310px; 
+      top: 200px; 
       bottom: 210px; 
       left: 0; right: 0;
       overflow-y: auto; 
@@ -75,7 +80,7 @@
     }
 
     .item-row { 
-      background: white; border-radius: 8px; margin-bottom: 8px; padding: 12px; 
+      background: white; border-radius: 8px; margin-bottom: 8px; padding: 10px 12px; 
       display: flex; justify-content: space-between; align-items: center;
       box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: background 0.2s;
     }
@@ -354,14 +359,9 @@
   function confirmarEEnviar() {
     const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagemFinal)}`;
     
-    // Abre o WhatsApp
     window.open(url, '_blank');
-    
-    // Fecha o modal visualmente
     fecharRevisao();
     
-    // Aguarda 1,5 segundos (tempo para o celular acionar a abertura do app)
-    // e recarrega a página inteira, zerando tudo
     setTimeout(() => {
       window.location.reload(); 
     }, 1500); 
