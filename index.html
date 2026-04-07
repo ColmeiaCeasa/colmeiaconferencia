@@ -51,8 +51,6 @@
     }
 
     .tabs-container { display: flex; background: white; border-top: 1px solid #eee; }
-    
-    /* Ajustado o tamanho da fonte e espaçamento para caberem os 4 botões lado a lado */
     .tab-btn { 
       flex: 1; padding: 10px 2px; border: none; background: transparent; 
       font-size: 13px; font-weight: bold; color: #888; cursor: pointer; 
@@ -60,9 +58,8 @@
       display: flex; flex-direction: column; align-items: center; gap: 2px;
     }
     .tab-btn.active { color: #075E54; border-bottom: 3px solid #25D366; background: #f0fdf4; }
-    .tab-icon { font-size: 16px; } /* Tamanho dos ícones nas abas */
+    .tab-icon { font-size: 16px; } 
 
-    /* LÓGICA DAS 4 ABAS: Oculta tudo o que não for da aba selecionada */
     .modo-estoque .box-quebra, .modo-estoque .box-entrada, .modo-estoque .box-saida { display: none !important; }
     .modo-quebra .box-estoque, .modo-quebra .box-entrada, .modo-quebra .box-saida { display: none !important; }
     .modo-entrada .box-estoque, .modo-entrada .box-quebra, .modo-entrada .box-saida { display: none !important; }
@@ -70,8 +67,8 @@
 
     .scrollable-content { 
       position: absolute;
-      top: 310px; /* Ajuste para o novo cabeçalho das abas */
-      bottom: 155px; 
+      top: 310px; 
+      bottom: 210px; /* Aumentado para dar espaço ao novo botão de limpar */
       left: 0; right: 0;
       overflow-y: auto; 
       padding: 10px 0;
@@ -100,6 +97,13 @@
       width: 90%; max-width: 470px; display: block; margin: auto; 
       padding: 16px; background: #25D366; color: white; 
       border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer;
+    }
+    
+    /* NOVO BOTÃO DE LIMPAR */
+    .btn-limpar {
+      width: 90%; max-width: 470px; display: block; margin: 10px auto 0 auto; 
+      padding: 12px; background: transparent; color: #d32f2f; 
+      border: 1px solid #d32f2f; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer;
     }
     
     .obs-container { width: 90%; max-width: 470px; margin: 0 auto 10px auto; }
@@ -166,6 +170,8 @@
     <textarea id="obsGeral" rows="1" placeholder="Notas da carga..."></textarea>
   </div>
   <button class="btn-enviar" onclick="abrirRevisao()">📋 Revisar e Enviar</button>
+  
+  <button class="btn-limpar" onclick="confirmarLimpeza()">🗑️ Limpar Tudo</button>
 </div>
 
 <div id="modalRevisao" class="modal">
@@ -195,14 +201,12 @@
   atualizarDataHora();
   setInterval(atualizarDataHora, 60000);
 
-  // NOVA LÓGICA PARA AS 4 ABAS
   function mudarAba(aba) {
     const lista = document.getElementById('listaProdutos');
-    lista.className = `modo-${aba}`; // Altera a classe principal da lista
+    lista.className = `modo-${aba}`;
 
-    // Desativa todos e ativa apenas a aba clicada
     ['estoque', 'entrada', 'saida', 'quebra'].forEach(id => {
-      const btnId = `btn${id.charAt(0).toUpperCase() + id.slice(1)}`; // Ex: 'estoque' vira 'btnEstoque'
+      const btnId = `btn${id.charAt(0).toUpperCase() + id.slice(1)}`;
       document.getElementById(btnId).classList.toggle('active', id === aba);
     });
   }
@@ -216,10 +220,8 @@
     
     const row = document.getElementById(`row-${index}`);
     
-    // Deixa a linha verdinha se houver QUALQUER campo preenchido nas 4 abas
     row.classList.toggle('item-preenchido', (estoque > 0 || entrada > 0 || saida > 0 || qbrValue > 0));
     
-    // Destaca de vermelho o campo de quebra, caso seja preenchido
     if (qbrValue > 0) {
       qbrInput.classList.add('input-quebra-ativa');
     } else {
@@ -256,7 +258,6 @@
       const lista = document.getElementById('listaProdutos');
       lista.innerHTML = '';
       
-      // INSERIDOS OS CAMPOS DE ENTRADA E SAÍDA
       dadosProdutos.forEach((p, index) => {
         lista.innerHTML += `
           <div class="item-row" id="row-${index}">
@@ -296,14 +297,13 @@
         temDados = true;
         msg += `📦 *${p.nome}*\n`;
         
-        // Array para agrupar apenas as informações preenchidas desse produto
         let infos = [];
         if (e > 0) infos.push(`Estoque: ${e}`);
         if (en > 0) infos.push(`Entrada: ${en}`);
         if (sa > 0) infos.push(`Saída: ${sa}`);
         if (b > 0) infos.push(`Quebra: ${b}`);
         
-        msg += infos.join(" | ") + `\n\n`; // Junta as infos com o traço vertical
+        msg += infos.join(" | ") + `\n\n`; 
       }
     });
 
@@ -343,7 +343,14 @@
     document.getElementById('selectConferente').value = "";
     
     document.querySelector('.scrollable-content').scrollTop = 0;
-    mudarAba('estoque'); // Volta sempre pra aba de estoque no final
+    mudarAba('estoque'); 
+  }
+
+  // NOVA FUNÇÃO: Pede confirmação antes de apagar a tela
+  function confirmarLimpeza() {
+    if(confirm("⚠️ Tem certeza que deseja apagar todos os dados preenchidos? Essa ação não pode ser desfeita.")) {
+      limparFormulario();
+    }
   }
 
   function confirmarEEnviar() {
